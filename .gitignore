@@ -19,3 +19,13 @@
 *.exe
 *.out
 *.app
+
+#images
+*.jpg
+*.bmp
+*.png
+*.jpeg
+
+
+#pdf files
+*.pdf
