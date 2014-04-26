@@ -58,7 +58,6 @@ void detectBlob(Mat img_original)
 
             if(hierarchy[idx][2] != -1)
             {
-                cout << "hole" << endl;
                 blobClassB += 1;
             
             }else
