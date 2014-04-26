@@ -11,8 +11,16 @@ vector<int> chunckGrayScale(int numberOfBits);
 int main(int argc, char **argv)
 {
     
-    Mat img256 = imread("radiography2.jpg", IMREAD_GRAYSCALE);
-    requantizeImage(img256, 15, "15bits.bmp");
+    if(argv[1] == 0)
+	{
+		cout << "No image to display!" << endl;
+		return 0;
+	}
+
+
+    Mat img_original = imread(argv[1], IMREAD_GRAYSCALE);
+    
+    requantizeImage(img_original, 2, "2bits_test.bmp");
 
     return 0; 
 }
