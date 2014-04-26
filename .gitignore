@@ -29,3 +29,10 @@
 
 #pdf files
 *.pdf
+
+#folders
+images/
+bin/
+resizedImages/
+rescaledImages/
+requantizedImages/
