@@ -60,10 +60,10 @@ class ScaleImage
 
 
 	public:
-		Mat resizeImage(Mat original_img, int newSize)
+		Mat resizeImage(Mat img_original, int newSize)
 		{
 			
-			if(!original_img.data) 
+			if(!img_original.data) 
 			{
 				throw "Imagem não foi inicializada corretamente.";
 				exit(0);
@@ -75,47 +75,64 @@ class ScaleImage
 				exit(0);
 			}
 
-			int scaleFactor = original_img.size().height/newSize;
+			if(img_original.rows != img_original.cols)
+			{
+				throw "Imagem não tem o mesmo numero de linhas e colunas";
+				exit(0);
+			}
+
+			if(newSize >= img_original.rows)
+			{
+				throw "Novo tamanho é maior ou igual ao tamanho da imagem original";
+				exit(0);
+			}
+
+			
+			int scaleFactor = img_original.rows/newSize;
 
 			Mat resized_img = Mat::zeros(newSize, newSize, CV_8UC1);
 
-		    for(int i = 2; i < original_img.size().height; i += 2)
+		    for(int i = 0; i < img_original.rows; i += scaleFactor)
 		    {
-		        for(int j = 2; j < original_img.size().height; j += 2)
+		        for(int j = 0; j < img_original.cols; j += scaleFactor)
 		        {
-		            resized_img.at<uchar>(i/scaleFactor, j/scaleFactor) = original_img.at<uchar>(i,j);
+		            resized_img.at<uchar>(i/scaleFactor, j/scaleFactor) = img_original.at<uchar>(i,j);
 		        }
 		    }
+
 		    if(!resized_img.isContinuous())
 		    {
 		        cout << "Erro ao fazer redimensionamento da imagem. Imagem não é contínua" << endl;
 		    }
 
-		    //imwrite(imageName, resized_img);
-
-		   
 		    return resized_img;
 		}
 
-		Mat rescaleImageTo512(Mat original_img)
+		Mat rescaleImageTo512(Mat img_original)
 		{
 			
-			if(!original_img.data) 
+			if(!img_original.data) 
 			{
 				throw "Imagem não foi inicializada corretamente.";
 				exit(0);
 			}
 
+			if(img_original.rows != img_original.cols)
+			{
+				throw "Imagem não tem o mesmo numero de linhas e colunas";
+				exit(0);
+			}
+
 			Mat resized_img = Mat::zeros(512, 512, CV_8UC1);
 
-			int s1 = 512/original_img.size().height;
-			int s2 = 512/original_img.size().width;
+			int s1 = 512/img_original.rows;
+			int s2 = 512/img_original.cols;
 
 			for(int i = 0; i < 512; i++)
 			{
 			    for(int j = 0; j < 512; j++)
 			    {
-			        resized_img.at<uchar>(i, j) = original_img.at<uchar>((round(i/s1)), (round(j/s2)));
+			        resized_img.at<uchar>(i, j) = img_original.at<uchar>((round(i/s1)), (round(j/s2)));
 			    }
 			}
 			if(!resized_img.isContinuous())
@@ -128,15 +145,14 @@ class ScaleImage
 
 		/* *
 		 * Faz o mapeamento para a nova escala de cinza. 
-		 *
-		 * @param original_img: imagem original a ser requantizada
+		 * @param img_original: imagem original a ser requantizada
 		 * @param newNumberOfBits: novo número de bits para a imagem requantizada
 		 * @param imageName: nome para salvar a imagem em disco
 		 * */
-		Mat requantizeImage(Mat original_img, int newNumberOfBits)
+		Mat requantizeImage(Mat img_original, int newNumberOfBits)
 		{
 			
-			if(!original_img.data) 
+			if(!img_original.data) 
 			{
 				throw "Imagem não foi inicializada corretamente.";
 				exit(0);
@@ -152,17 +168,17 @@ class ScaleImage
 
 			int deltaGrayLeves = 256/newNumberOfBits;
 
-			Mat requantized_img = Mat::zeros(original_img.size().height, original_img.size().width, CV_8UC1);
+			Mat requantized_img = Mat::zeros(img_original.rows, img_original.cols, CV_8UC1);
 
 			int temp =  0;
 
-			for(int i = 0; i < original_img.size().height; i++)
+			for(int i = 0; i < img_original.rows; i++)
 			{
-				for(int j = 0; j < original_img.size().width; j++)
+				for(int j = 0; j < img_original.cols; j++)
 				{
 					int comparativeGrayLevel = 255; 
 
-					temp = (int)original_img.at<uchar>(i,j);
+					temp = (int)img_original.at<uchar>(i,j);
 
 					for(int count = newGrayScale.size() - 1; count >= 0; count--)
 					{
@@ -209,24 +225,7 @@ int main(int argc, char **argv)
 	ScaleImage scale;
 
 	/*TODO: use listFiles.cpp to get all the files from a given
-			directory
-
-	vector<string> files = listFiles("images");
-
-	int resizeScale = 512;
-
-	for(int i = 0; i < files.size(); i++)
-	{
-		cout << files.at(i) << endl;
-		Mat img = imread(files.at(i), IMREAD_GRAYSCALE);
-		stringstream imageName;
-		imageName << "resizedImages/resizedImage" << i << ".bmp";
-		cout << imageName.str() << endl;
-		cout << resizeScale << endl;
-		imwrite(imageName.str(), scale.resizeImage(img, resizeScale/2));
-		
-		resizeScale = resizeScale/2;
-	}*/
+			directory*/
 
 	Mat img;
 

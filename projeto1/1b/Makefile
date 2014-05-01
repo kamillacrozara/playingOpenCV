@@ -1,4 +1,8 @@
 all: ScaleImage.cpp 
+	$(RM) -R bin/
+	$(RM) -R resizedImages/
+	$(RM) -R rescaledImages/
+	$(RM) -R requantizedImages/
 	mkdir bin/
 	mkdir resizedImages/
 	mkdir rescaledImages/
