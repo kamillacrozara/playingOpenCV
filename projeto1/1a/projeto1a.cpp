@@ -5,17 +5,9 @@
 using namespace std;
 using namespace cv;
 
-void changeIntensity(Mat &input, Rect &roi, int flag);
 
-void printHeader()
-{
-    cout << "A habilidade do olho para discriminar mudanças no brilho em qualquer nível de adaptação é de considerável interesse" << endl;
-    cout << "Um observador típico pode observar de uma a duas duzias de mudanças de intensidade."<< endl;
-    cout << "De uma forma geral, esse resultado está relacionado ao número de diferentes níveis de cinza que uma pessoa pessoa pode ver em qualquer ponto de uma imagem monocromática." << endl;
-
-    cout << "Insira 's' para continuar." << endl;
-    cout <<  "Insira 'q' para sair a qualquer momento." << endl;
-}
+//
+void changeIntensity(Mat input, Rect &roi, int flag);
         
 int main(int argc, char **argv)
 {
@@ -25,24 +17,6 @@ int main(int argc, char **argv)
     
     int intensity = 0;
     int grayPerception = 0;
-
-
-    //printHeader();
-    
-   /* *  for(;;)
-    {
-        cin >> userAnswer;
-
-        if(userAnswer == 's')
-        {
-            break;
-        }
-        if(userAnswer == 'q')
-        {
-            return 0;
-        }
-        
-    }  */
 
     namedWindow("Grays Intesity Test", 1);
     imshow("Grays Intesity Test", input);
@@ -67,15 +41,16 @@ int main(int argc, char **argv)
                 imshow("Grays Intesity Test", input);
             }
         }
-
+        cout << "======================================================" << endl;
         cout << "Mudanças de intensidade observadas = " << grayPerception << endl;
+        cout << "======================================================" << endl;
         return 0;
     }
     
     return 0;
 }
 
-void changeIntensity(Mat &input, Rect &roi, int flag)
+void changeIntensity(Mat input, Rect &roi, int flag)
 {
     switch(flag)
     {
@@ -84,13 +59,9 @@ void changeIntensity(Mat &input, Rect &roi, int flag)
             break;
 
         case(1):
-            if(roi.width > 16 && roi.height > 16)
+            if(roi.width >= 32 && roi.height >= 32)
             {
                 roi = (Rect(roi.x += 8, roi.y += 8, roi.width -=16, roi.height-=16));     
-            }
-            else
-            {
-                break;
             }
             break;
 

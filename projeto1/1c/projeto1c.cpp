@@ -6,26 +6,30 @@
 using namespace std;
 using namespace cv;
 
-void detectBlob(Mat img);
+void detectBlob(Mat img, string imageName);
 
 int main(int argc, char **argv)
 {
     
-    if(argv[1] == 0)
-	{
-		cout << "No image to display!" << endl;
-		return 0;
-	} 
+    /*TODO: use listFiles.cpp to get all the files from a given
+            directory*/
 
-    Mat img_original = imread(argv[1], IMREAD_GRAYSCALE);
-    
-    detectBlob(img_original);
-
+    Mat img_original;
+    img_original = imread("images/fig1.jpg", IMREAD_GRAYSCALE);
+    detectBlob(img_original, "fig1.bmp");
+    img_original = imread("images/fig2.jpg", IMREAD_GRAYSCALE);
+    detectBlob(img_original, "fig2.bmp");
+    img_original = imread("images/fig3.jpg", IMREAD_GRAYSCALE);
+    detectBlob(img_original, "fig3.bmp");
+    img_original = imread("images/fig4.jpg", IMREAD_GRAYSCALE);
+    detectBlob(img_original, "fig4.bmp");
+    img_original = imread("images/HoleAnalysis_4.png", IMREAD_GRAYSCALE);
+    detectBlob(img_original, "HoleAnalysis_4.bmp");
     return 0; 
 
 }
 
-void detectBlob(Mat img_original)
+void detectBlob(Mat img_original, string imageName)
 {
     /**
      * Falar no relatório sobre o uso de threshold e Canny para
@@ -39,7 +43,7 @@ void detectBlob(Mat img_original)
     adaptiveThreshold(img_original, img_original, 255, 0, 0, 75, 10);  
     bitwise_not(img_original, img_original);
     
-    imwrite("gaussianResult.bmp", img_original);
+    imwrite("gaussianResult/"+imageName, img_original);
 
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
@@ -66,7 +70,7 @@ void detectBlob(Mat img_original)
             }
         }    
     }
-
+    cout << "[Imagem " + imageName + "]" << endl;
     cout << "Número de manchas = " << spots << endl;
     cout << "Manchas classe A = " << blobClassA << endl;
     cout << "Manchas classe B = " << blobClassB << endl;
